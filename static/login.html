@@ -6,30 +6,44 @@
     <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <strong>CS 3550</strong>
-            <a href="index.html">Assignments</a>
+    <header class="navigation-banner">
+        <nav class="contents">
+            <div class="navigation-left">
+                <span>CS 3550</span>
+                <a href="index.html">Assignments</a>
+            </div>
             <a href="profile.html">Profile</a>
         </nav>
     </header>
-    <h1>Log in</h1>
-    <form> 
-        <ul>
-            <li>
-                <label for="username">Username:
-                    <input id="username" type="text" autofocus>
-                </label>
-            </li>
-            <li>
-                <label for="password">Password:
-                    <input id="password" type="password">
-                </label>
-            </li>
-        </ul>
-    </form>
-    <form action="profile.html">
-        <button title="Log in and go to the Profile Page">Log in</button>
-    </form>
+
+    <main class="main-contents">
+        <hgroup>
+            <h1 class="page-title">Log in</h1>
+            <div class="line-below-title"></div>
+        </hgroup>
+
+        <form id="login-form"> 
+            <label for="username">Username:
+                <input id="username" type="text" autofocus>
+            </label>
+            <label for="password">Password:
+                <input id="password" type="password">
+            </label>
+            <button title="Log in and go to the Profile Page" type="submit">Log in</button>
+            <!-- <ul>
+                <li>
+                    <label for="username">Username:
+                        <input id="username" type="text" autofocus>
+                    </label>
+                </li>
+                <li>
+                    <label for="password">Password:
+                        <input id="password" type="password">
+                    </label>
+                </li>
+            </ul> -->
+            <!-- <button title="Log in and go to the Profile Page" type="submit">Log in</button> -->
+        </form>
+    </main>
 </body>
 

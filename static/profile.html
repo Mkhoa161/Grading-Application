@@ -6,53 +6,65 @@
     <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <strong>CS 3550</strong>
-            <a href="index.html">Assignments</a>
+    <header class="navigation-banner">
+        <nav class="contents">
+            <div class="navigation-left">
+                <span>CS 3550</span>
+                <a href="index.html">Assignments</a>
+            </div>
             <a href="profile.html">Profile</a>
         </nav>
     </header>
-    <h1>Your grades</h1>
-    Currently logged in as ta1. <a href="login.html" role="button" title="Log out and go to the login page">Log out</a>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Assignment</th>
-                <th>Graded</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><a href="assignment.html">Github username</a></td>
-                <td>2 / 3</td>
-            </tr>
-            <tr>
-                <td><a href="assignment.html">Homework 1 (HTML)</a></td>
-                <td>1 / 2</td>
-            </tr>
-            <tr>
-                <td><a href="assignment.html">Homework 2 (CSS)</a></td>
-                <td>0 / 1</td>
-            </tr>
-            <tr>
-                <td><a href="assignment.html">Homework 3 (Backend)</a></td>
-                <td>0 / 0</td>
-            </tr>
-            <tr>
-                <td><a href="assignment.html">Homework 4 (Deploy)</a></td>
-                <td>0 / 0</td>
-            </tr>
-            <tr>
-                <td><a href="assignment.html">Homework 5 (Permissions)</a></td>
-                <td>0 / 0</td>
-            </tr>
-            <tr>
-                <td><a href="assignment.html">Homework 6 (JS)</a></td>
-                <td>0 / 0</td>
-            </tr>
-        </tbody>
-    </table>
+    <main class="main-contents">
+        <hgroup>
+            <h1 class="page-title">Your grades</h1>
+            <div class="line-below-title"></div>
+        </hgroup>
+        <div class="action-block">
+            <div class="link">
+                Currently logged in as ta1. <a href="login.html" role="button" title="Log out and go to the login page">Log out</a>
+            </div>
+        </div>
+        
+        <table>
+            <thead class="header-row">
+                <tr>
+                    <th>Assignment</th>
+                    <th class="number-column">Graded</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="assignment.html">Github username</a></td>
+                    <td class="number-column">2 / 3</td>
+                </tr>
+                <tr>
+                    <td><a href="assignment.html">Homework 1 (HTML)</a></td>
+                    <td class="number-column">1 / 2</td>
+                </tr>
+                <tr>
+                    <td><a href="assignment.html">Homework 2 (CSS)</a></td>
+                    <td class="number-column">0 / 1</td>
+                </tr>
+                <tr>
+                    <td><a href="assignment.html">Homework 3 (Backend)</a></td>
+                    <td class="number-column">0 / 0</td>
+                </tr>
+                <tr>
+                    <td><a href="assignment.html">Homework 4 (Deploy)</a></td>
+                    <td class="number-column">0 / 0</td>
+                </tr>
+                <tr>
+                    <td><a href="assignment.html">Homework 5 (Permissions)</a></td>
+                    <td class="number-column">0 / 0</td>
+                </tr>
+                <tr>
+                    <td><a href="assignment.html">Homework 6 (JS)</a></td>
+                    <td class="number-column">0 / 0</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
 </body>
 

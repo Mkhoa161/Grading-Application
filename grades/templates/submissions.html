@@ -1,26 +1,12 @@
 <!doctype html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <title>Submission Page</title>
-    <link rel="stylesheet" href="/static/main.css">
-</head>
-<body>
-    <header class="navigation-banner">
-        <nav class="contents">
-            <div class="navigation-left">
-                <span>CS 3550</span>
-                <a href="index.html">Assignments</a>
-            </div>
-            <a href="profile.html">Profile</a>
-        </nav>
-    </header>
+{% include 'header.html' with title='Submission Page' %}
 
+<body>
     <main class="main-contents">
         <hgroup>
-            <h1 class="page-title">Homework 1 (HTML)</h1>
+            <h1 class="page-title">{{ assignment.title }}</h1>
             <div class="line-below-title"></div>
-            <div class="page-subtitle">All grades out of 100</div>
+            <div class="page-subtitle">All grades out of {{ assignment.points }}</div>
         </hgroup>
 
         <form id="submission-form">
@@ -31,20 +17,17 @@
                     <th>Grade</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>s1</td>
-                        <td><a href="#" title="Going to the student's submission">Submission</a></td>
-                        <td><label for="grades"><input id="grades" type="number" min="0" max="100"></label></td>
-                    </tr>
-                    <tr>
-                        <td>s2</td>
-                        <td><a href="#" title="Going to the student's submission">Submission</a></td>
-                        <td><label for="grades"><input id="grades" type="number" min="0" max="100"></label></td>
-                    </tr>
+                    {% for submission in submission_set %}
+                        <tr>
+                            <td>{{submission.author.get_full_name}}</td>
+                            <td><a href="/{{submission.file.url}}/" title="Going to the student's submission">Submission</a></td>
+                            <td><label for="grades"><input id="grades" type="number" min="0" max="100" value="{{ submission.score|default:'' }}"></label></td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             <button title="Submit all students' grades" type="submit">Submit</button>
-            <a href="assignment.html">Back to assignment</a>
+            <a href="/{{ assignment.id }}/">Back to assignment</a>
         </form>
     </main>
 </body>

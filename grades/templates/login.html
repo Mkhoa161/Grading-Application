@@ -1,21 +1,7 @@
 <!doctype html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <title>Log in Page</title>
-    <link rel="stylesheet" href="/static/main.css">
-</head>
-<body>
-    <header class="navigation-banner">
-        <nav class="contents">
-            <div class="navigation-left">
-                <span>CS 3550</span>
-                <a href="index.html">Assignments</a>
-            </div>
-            <a href="profile.html">Profile</a>
-        </nav>
-    </header>
+{% include 'header.html' with title='Login Page' %}
 
+<body>
     <main class="main-contents">
         <hgroup>
             <h1 class="page-title">Log in</h1>
@@ -30,19 +16,6 @@
                 <input id="password" type="password">
             </label>
             <button title="Log in and go to the Profile Page" type="submit">Log in</button>
-            <!-- <ul>
-                <li>
-                    <label for="username">Username:
-                        <input id="username" type="text" autofocus>
-                    </label>
-                </li>
-                <li>
-                    <label for="password">Password:
-                        <input id="password" type="password">
-                    </label>
-                </li>
-            </ul> -->
-            <!-- <button title="Log in and go to the Profile Page" type="submit">Log in</button> -->
         </form>
     </main>
 </body>

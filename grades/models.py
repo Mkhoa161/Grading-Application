@@ -9,10 +9,15 @@ class Assignment(models.Model):
     weight = models.IntegerField(blank=False, null=False)
     points = models.IntegerField(blank=True, null=False)
 
+    def __eq__(self, other):
+        if not isinstance(other, Assignment):
+            return NotImplemented
+        return self.id == other.id
+
 
 class Submission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-    grader = models.ForeignKey(User, on_delete=models.RESTRICT, null=True, related_name='graded_set') #TODO: will consider to change null
+    grader = models.ForeignKey(User, on_delete=models.RESTRICT, null=True, related_name='graded_set')
     file = models.FileField(null=False)
-    score = models.FloatField(null=True, blank=True) #TODO: will consider to change null
+    score = models.FloatField(null=True, blank=True)

@@ -9,10 +9,10 @@ class Assignment(models.Model):
     weight = models.IntegerField(blank=False, null=False)
     points = models.IntegerField(blank=True, null=True)
 
-    def __eq__(self, other):
-        if not isinstance(other, Assignment):
-            return NotImplemented
-        return self.id == other.id
+    # def __eq__(self, other):
+    #     if not isinstance(other, Assignment):
+    #         return NotImplemented
+    #     return self.id == other.id
 
 
 class Submission(models.Model):

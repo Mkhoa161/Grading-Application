@@ -4,10 +4,10 @@ from django.contrib.auth.models import User, Group
 # Create your models here.
 class Assignment(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False)
-    description = models.TextField(blank=True, null=False)
-    deadline = models.DateTimeField(blank=True, null=False)
+    description = models.TextField(blank=True, null=True)
+    deadline = models.DateTimeField(blank=True, null=True)
     weight = models.IntegerField(blank=False, null=False)
-    points = models.IntegerField(blank=True, null=False)
+    points = models.IntegerField(blank=True, null=True)
 
     def __eq__(self, other):
         if not isinstance(other, Assignment):

@@ -9,7 +9,8 @@
             <div class="page-subtitle">All grades out of {{ assignment.points }}</div>
         </hgroup>
 
-        <form id="submission-form">
+        <form id="submission-form" action="/{{assignment.id}}/submissions" method="post">
+            {% csrf_token %}
             <table>
                 <thead class="header-row">
                     <th>Student</th>

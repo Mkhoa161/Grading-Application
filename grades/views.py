@@ -1,5 +1,5 @@
 from . import models
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import User
 
 
@@ -12,12 +12,14 @@ def assignment(request, assignment_id):
     g = User.objects.get(username='g')
     assignment = get_object_or_404(models.Assignment, id=assignment_id)
     submission_count = assignment.submission_set.count()
-    #graded_count = request.user.graded_set.filter(assignment=assignment).count()
     graded_count = g.graded_set.filter(assignment=assignment).count()
     total_student = models.Group.objects.get(name="Students").user_set.count()
     return render(request, "assignment.html", context={'assignment': assignment, 'submission_count': submission_count, 'graded_count': graded_count, 'total_student': total_student})
 
 def submissions(request, assignment_id):
+    if request.method == "POST":
+        return redirect(f"/{assignment_id}/submissions")
+    
     assignment = get_object_or_404(models.Assignment, id=assignment_id)
     return render(request, "submissions.html", context={'assignment': assignment, 'submission_set': assignment.submission_set.filter(grader__username='g').order_by('author__username')})
 

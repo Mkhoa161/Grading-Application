@@ -11,6 +11,9 @@
 
         <form id="submission-form" action="/{{assignment.id}}/submissions" method="post">
             {% csrf_token %}
+            {% if is_invalid_id %}
+                <output class="error-message">One or more submission IDs were invalid. Please check your input.</output>
+            {% endif %}
             <table>
                 <thead class="header-row">
                     <th>Student</th>
@@ -18,11 +21,16 @@
                     <th>Grade</th>
                 </thead>
                 <tbody>
-                    {% for submission in submission_set %}
+                    {% for submission, errors in submission_set %}
                         <tr>
                             <td>{{submission.author.get_full_name}}</td>
-                            <td><a href="/{{submission.file.url}}/" title="Going to the student's submission">Submission</a></td>
-                            <td><label for="grades"><input id="grades" type="number" min="0" max="100" value="{{ submission.score|default:'' }}"></label></td>
+                            <td><a href="{{submission.file.url}}" title="Going to the student's submission">Submission</a></td>
+                            <td><label for="grades"><input id="grades" name="grade-{{submission.id}}" type="number" min="0" max="200" step="0.01" value="{{ submission.score|default_if_none:'' }}"></label></td>
+                            <td>
+                                {% for error in errors %}
+                                    <output>{{ error }}</output><br>
+                                {% endfor %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

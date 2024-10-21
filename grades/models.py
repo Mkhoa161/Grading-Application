@@ -6,8 +6,8 @@ class Assignment(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False)
     description = models.TextField(blank=True, null=True)
     deadline = models.DateTimeField(blank=True, null=True)
-    weight = models.IntegerField(blank=False, null=False)
-    points = models.IntegerField(blank=False, null=False)
+    weight = models.IntegerField(blank=False, null=False, default=1)
+    points = models.IntegerField(blank=False, null=False, default=100)
 
 
 class Submission(models.Model):

@@ -48,3 +48,24 @@ h3, p, ul {margin-bottom: 1rem; margin-top: 1rem;}
 .action-block { display: flex; flex-direction: column; gap: 1rem;}
 .action-block .link { display: flex; flex-direction: row; justify-content: space-between;}
 .main-contents, .navigation-banner .contents {max-width: 50rem; margin-left: auto; margin-right: auto;} 
+
+/*Homework 4 changes here*/
+output{
+    font-weight: bold;
+    color: red;
+}
+
+#submission-form input:invalid{
+    border: 2px solid red;
+}
+
+.action-block p{
+    margin: 0;
+    padding: 0;
+}
+
+.action-block form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

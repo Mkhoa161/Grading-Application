@@ -8,12 +8,13 @@
             <div class="line-below-title"></div>
         </hgroup>
 
-        <form id="login-form"> 
+        <form id="login-form" method="post" action="/profile/login">
+            {% csrf_token %}
             <label for="username">Username:
-                <input id="username" type="text" autofocus>
+                <input id="username" type="text" name="username" autofocus>
             </label>
             <label for="password">Password:
-                <input id="password" type="password">
+                <input id="password" type="password" name="password">
             </label>
             <button title="Log in and go to the Profile Page" type="submit">Log in</button>
         </form>

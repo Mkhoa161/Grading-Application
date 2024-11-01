@@ -26,4 +26,5 @@ urlpatterns = [
     path("profile/", views.profile),
     path("profile/login", views.login_form),
     path('uploads/<str:filename>', views.show_upload),
+    path('profile/logout/', views.logout_form)
 ]

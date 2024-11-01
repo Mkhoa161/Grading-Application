@@ -3,6 +3,7 @@ from . import models
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def index(request):
@@ -62,10 +63,26 @@ def profile(request):
     for assignment in assignments:
         assignment_info.append((assignment.id, assignment.title, g.graded_set.filter(assignment=assignment, score__isnull=False).count(), g.graded_set.filter(assignment=assignment).count())) 
     
-    return render(request, "profile.html", context={'assignment_info': assignment_info})
+    return render(request, "profile.html", context={'assignment_info': assignment_info, 'user': request.user})
 
 def login_form(request):
+    if request.method == "POST":
+        data = request.POST
+        username = data.get("username", "")
+        password = data.get("password", "")
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("/profile/")
+        else:
+            return render(request, "login.html")
+
     return render(request, "login.html")
+
+def logout_form(request):
+    logout(request)
+    return redirect("/profile/login")
 
 def show_upload(request, filename):
     submission = models.Submission.objects.get(file__iexact=filename)

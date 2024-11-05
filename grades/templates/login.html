@@ -10,6 +10,12 @@
 
         <form id="login-form" method="post" action="/profile/login/">
             {% csrf_token %}
+            {% if error %}
+                <output>{{ error }}</output>
+            {% endif %}
+            <label for="next">
+                <input type="hidden" name="next" id="next" value={{ next }}/>
+            </label>
             <label for="username">Username:
                 <input id="username" type="text" name="username" autofocus>
             </label>

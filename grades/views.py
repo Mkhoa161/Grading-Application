@@ -6,12 +6,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from django.db.models import Count
+from django.contrib.auth.decorators import login_required
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
+@login_required
 def index(request):
     assignments = models.Assignment.objects.all()
     return render(request, "index.html", context={'assignments': assignments})
 
+@login_required
 def assignment(request, assignment_id):
     if request.method == "POST":
         assignment = get_object_or_404(models.Assignment, id=assignment_id)
@@ -59,18 +64,19 @@ def assignment(request, assignment_id):
                                                        'assignment': assignment, 'submission_count': submission_count, 'graded_count': graded_count, 'total_student': total_student, 
                                                        'student_submission': student_submission, 'is_passed': is_passed, 'percentage_score': percentage_score})
 
+@login_required
 def submissions(request, assignment_id):
-    is_ta = is_TA(request.user)
     errors = {}
     isInvalidID = False
     if request.method == "POST":
-        errors, isInvalidID = updateGrades(request.POST, assignment_id)
+        errors, isInvalidID = updateGrades(request.POST, assignment_id, request.user)
         if (not errors) and (not isInvalidID):
             return redirect(f"/{assignment_id}/submissions")
     
     assignment = get_object_or_404(models.Assignment, id=assignment_id)
     submission_set = []
 
+    is_ta = is_TA(request.user)
     if is_ta:
         for submission in assignment.submission_set.filter(grader__username=request.user.username).order_by('author__username'):
             errors_submission = errors.get(submission.id, [])
@@ -80,9 +86,12 @@ def submissions(request, assignment_id):
         for submission in assignment.submission_set.all():
             errors_submission = errors.get(submission.id, [])
             submission_set.append((submission, errors_submission))
-
+    else:
+        raise PermissionDenied("You do not have permission to access this page.")
+    
     return render(request, "submissions.html", context={'is_superuser': request.user.is_superuser, 'is_TA': is_ta,'assignment': assignment, 'submission_set': submission_set, 'is_invalid_id': isInvalidID})
 
+@login_required
 def profile(request):
     user = request.user
     assignments = models.Assignment.objects.all()
@@ -141,27 +150,36 @@ def profile(request):
 def login_form(request):
     if request.method == "POST":
         data = request.POST
+        next = data.get("next", "")
         username = data.get("username", "")
         password = data.get("password", "")
 
         user = authenticate(username=username, password=password)
-        if user is not None:
+        if user is not None and url_has_allowed_host_and_scheme(next, None):
             login(request, user)
-            return redirect("/profile/")
-        else:
-            return render(request, "login.html")
+            if (len(next) > 1):
+                next = next.rstrip('/')
 
-    return render(request, "login.html")
+            return redirect(next)
+        else:
+            next = next.rstrip('/')
+            error = 'Username and password do not match'
+            return render(request, "login.html", {'next': next, 'error': error})
+
+    next = request.GET.get("next", "/profile/")
+    next = next.rstrip('/')
+    return render(request, "login.html", {'next': next})
 
 def logout_form(request):
     logout(request)
     return redirect("/profile/login/")
 
+@login_required
 def show_upload(request, filename):
     submission = models.Submission.objects.get(file__iexact=filename)
-    return HttpResponse(submission.file.open())
+    return HttpResponse(submission.view_submission(request.user).open())
 
-def updateGrades(data, assignment_id):
+def updateGrades(data, assignment_id, user):
     errors = {}
     isInvalidID = False
     for key in data:
@@ -177,11 +195,11 @@ def updateGrades(data, assignment_id):
             grade = data[key]
 
             if grade == "":
-                submission.score = None
+                submission.change_grade(user, None)
             else:
                 isValid, message = validate_grade(grade, submission)
                 if isValid:
-                    submission.score = float(grade)
+                    submission.change_grade(user, float(grade))
                 else:
                     errors.setdefault(submission_id, []).append(message)
 

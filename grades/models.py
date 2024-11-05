@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.core.exceptions import PermissionDenied
 
 # Create your models here.
 class Assignment(models.Model):
@@ -16,3 +17,16 @@ class Submission(models.Model):
     grader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='graded_set')
     file = models.FileField(null=False)
     score = models.FloatField(null=True, blank=True)
+
+    def change_grade(self, user, new_score):
+        if not user.groups.filter(name="Teaching Assistants").exists() and not user.is_superuser:
+            raise PermissionDenied("You do not have permission to change grade.")
+        
+        self.score = new_score
+
+    def view_submission(self, user):
+        if not user == self.author and not user == self.grader and not user.is_superuser:
+            raise PermissionDenied("You do not have permission to view the submission")
+        
+        return self.file
+

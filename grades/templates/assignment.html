@@ -10,28 +10,53 @@
                 Due {{assignment.deadline|date:"F d"}}, total of {{ assignment.points }} point{{assignment.points|pluralize}} 
             </div>
         </hgroup>
-
+        
+        {% if not is_authenticated or is_student %}
         <div class="action-block">
             <p>
-                {% if alice_submission %}
-                    Current submission: <a href="{{alice_submission.file.url}}">{{alice_submission.file.name}}</a>
+                {% if student_submission %}
+                    {% if student_submission.score is not None %}
+                        Your submission, <a href="{{student_submission.file.url}}">{{student_submission.file.name}}</a>, received {{student_submission.score}}/{{assignment.points}} point{{assignment.points|pluralize}} ({{ percentage_score }}%)
+                    {% elif student_submission.score is None and is_passed %}
+                        Your submission, <a href="{{student_submission.file.url}}">{{student_submission.file.name}}</a>, is being graded
+                    {% elif not is_passed %}
+                        Your current submission is <a href="{{student_submission.file.url}}">{{student_submission.file.name}}</a>
+                    {% endif %}
                 {% else %}
-                    No current submission
+                    {% if not is_passed %}
+                        No current submission
+                    {% else %}
+                        You did not submit this assignment and received 0 points
+                    {% endif %}
                 {% endif %}
             </p>
+
+            {% if not is_passed %}
             <form action="/{{assignment.id}}/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <label for="file"><input type="file" name="uploaded_file"></label>
                 <button type="submit">Submit</button>
             </form>
+            {% endif %}
         </div>
+        {% endif %}
 
+        {% if is_TA %}
         <div class="action-block">
             Currently {{ submission_count }}/{{ total_student }} submission{{submission_count|pluralize}}
             <div class="link">
                 {{ graded_count }} submission{{ graded_count|pluralize }} assigned to you <a href="/{{ assignment.id }}/submissions" title="Going to Submissions Page">Grade</a>
             </div>
         </div>
+        {% endif %}
+
+        {% if is_superuser %}
+        <div class="action-block">
+            <div class="link">
+            Currently {{ submission_count }}/{{ total_student }} submission{{submission_count|pluralize}} <a href="/{{ assignment.id }}/submissions" title="Going to Submissions Page">Grade</a>
+            </div>
+        </div>
+        {% endif %}
 
 
         <h3>Description</h3>

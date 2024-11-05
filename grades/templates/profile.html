@@ -13,6 +13,7 @@
             </div>
         </div>
         
+        {% if is_TA or is_superuser %}
         <table>
             <thead class="header-row">
                 <tr>
@@ -29,6 +30,33 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
+
+        {% if is_student %}
+        <table>
+            <thead class="header-row">
+                <tr>
+                    <th>Assignment</th>
+                    <th class="number-column">Graded</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id, title, percentage_grade, state in student_info %}
+                    <tr>
+                        <td><a href="/{{ id }}/">{{ title }}</a></td>
+                        {% if state == 'Graded' %}
+                            <td class="number-column">{{ percentage_grade }}%</td>
+                        {% else %}
+                            <td class="number-column">{{ state }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="final_grade">
+                <tr><td>Final grade</td><td class="number-column">{{ final_grade|floatformat:1 }}%</td></tr>
+            </tfoot>
+        </table>
+        {% endif %}
     </main>
 </body>
 

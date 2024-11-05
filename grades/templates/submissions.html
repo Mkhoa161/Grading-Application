@@ -9,6 +9,7 @@
             <div class="page-subtitle">All grades out of {{ assignment.points }}</div>
         </hgroup>
 
+        {% if is_TA or is_superuser %}
         <form id="submission-form" action="/{{assignment.id}}/submissions" method="post">
             {% csrf_token %}
             {% if is_invalid_id %}
@@ -16,9 +17,11 @@
             {% endif %}
             <table>
                 <thead class="header-row">
-                    <th>Student</th>
-                    <th>Submission</th>
-                    <th>Grade</th>
+                    <tr>
+                        <th>Student</th>
+                        <th>Submission</th>
+                        <th>Grade</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {% for submission, errors in submission_set %}
@@ -38,6 +41,7 @@
             <button title="Submit all students' grades" type="submit">Submit</button>
             <a href="/{{ assignment.id }}/">Back to assignment</a>
         </form>
+        {% endif %}
     </main>
 </body>
 

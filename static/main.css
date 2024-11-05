@@ -69,3 +69,7 @@ output{
     flex-direction: row;
     justify-content: space-between;
 }
+
+.final_grade td{
+    font-weight: 700;
+}

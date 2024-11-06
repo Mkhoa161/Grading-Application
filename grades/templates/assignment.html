@@ -34,7 +34,10 @@
             {% if not is_passed %}
             <form action="/{{assignment.id}}/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <label for="file"><input type="file" name="uploaded_file"></label>
+                {% if error %}
+                    <output>{{error}}</output>
+                {% endif %}
+                <label for="file"><input type="file" name="uploaded_file" accept="application/pdf"></label>
                 <button type="submit">Submit</button>
             </form>
             {% endif %}

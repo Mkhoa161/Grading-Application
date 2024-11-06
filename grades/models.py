@@ -19,7 +19,7 @@ class Submission(models.Model):
     score = models.FloatField(null=True, blank=True)
 
     def change_grade(self, user, new_score):
-        if not user.groups.filter(name="Teaching Assistants").exists() and not user.is_superuser:
+        if not user == self.grader and not user.is_superuser:
             raise PermissionDenied("You do not have permission to change grade.")
         
         self.score = new_score

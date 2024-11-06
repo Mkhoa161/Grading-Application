@@ -9,6 +9,7 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 
 # Create your views here.
 @login_required
@@ -24,6 +25,10 @@ def assignment(request, assignment_id):
         if not file:
             return redirect(f"/{assignment_id}/")
         
+        if file.size > 64 * 1024 * 1024: #64 MiB
+            error = "The file size is too large."
+            return redirect(f"/{assignment_id}/?error={error}")
+        
         try:
             student_submission = assignment.submission_set.get(author__username=request.user.username)
         except ObjectDoesNotExist:
@@ -32,6 +37,10 @@ def assignment(request, assignment_id):
         if assignment.deadline < timezone.now():
             return HttpResponseBadRequest("The deadline for submitting this assignment has passed")
         
+        if not is_pdf(file):
+            error = 'The file type is not pdf.'
+            return redirect(f"/{assignment_id}/?error={error}")
+
         if student_submission:
             student_submission.file = file
             student_submission.save()
@@ -59,10 +68,13 @@ def assignment(request, assignment_id):
     is_passed = assignment.deadline < timezone.now()
     percentage_score = 0
     if student_submission and student_submission.score:
-        percentage_score = 100 * student_submission.score / assignment.points 
+        percentage_score = 100 * student_submission.score / assignment.points
+    
+    error = request.GET.get('error', None)
+    
     return render(request, "assignment.html", context={'is_superuser': request.user.is_superuser, 'is_authenticated': request.user.is_authenticated, 'is_TA': is_ta, 'is_student': is_stu, 
                                                        'assignment': assignment, 'submission_count': submission_count, 'graded_count': graded_count, 'total_student': total_student, 
-                                                       'student_submission': student_submission, 'is_passed': is_passed, 'percentage_score': percentage_score})
+                                                       'student_submission': student_submission, 'is_passed': is_passed, 'percentage_score': percentage_score, 'error': error})
 
 @login_required
 def submissions(request, assignment_id):
@@ -177,7 +189,13 @@ def logout_form(request):
 @login_required
 def show_upload(request, filename):
     submission = models.Submission.objects.get(file__iexact=filename)
-    return HttpResponse(submission.view_submission(request.user).open())
+    if not is_pdf(submission.file):
+        raise Http404("This file can be dangerous.")
+    
+    http_response = HttpResponse(submission.view_submission(request.user).open())
+    http_response['Content-Type'] = 'application/pdf'
+    http_response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return http_response
 
 def updateGrades(data, assignment_id, user):
     errors = {}
@@ -230,3 +248,6 @@ def pick_grader(assignment):
     graders = tas.user_set.annotate(total_assigned=Count('graded_set'))
     grader = graders.order_by('total_assigned').first()
     return grader
+
+def is_pdf(file):
+    return file.name.endswith('.pdf') and next(file.chunks()).startswith(b'%PDF-')

@@ -1,42 +1,34 @@
-Your assignment repository
-==========================
+# Grading Application
 
-Please use this repository to hold all of your work for CS 3550
-web dev 1. You will submit your assigments, and they will be graded,
-using the contents of this repository only, at the commit
-corresponding to the latest possible submission time (including
-all granted extensions).
+## Project Overview
 
-This repository is private. You should not be able to view another
-student's repository and they should not be able to view yours.
+The **Grading Application** is a web-based solution designed to facilitate efficient grading processes, allowing instructors to manage and grade student submissions seamlessly. Built using **Django**, **Python**, **HTML**, **CSS**, **JavaScript**, and **SQLite**, the application provides a user-friendly interface with robust backend support. It is hosted on **AWS EC2** for scalable deployment.
 
-Initial contents
-----------------
+## Features
 
-There's a folder in this repository called `.github`. This folder
-defines the autotester. Do not modify any files in it.
+- **Interactive Features**: 
+  - Sortable tables for dynamic viewing and managing of grades.
+  - Asynchronous file uploads with real-time progress feedback for a smooth user experience.
+  - Interactive grade hypothesizing, allowing instructors to experiment with different grade configurations.
 
-There's also a file in this repository called `.gitignore`. This file
-tells `git` not to commit certain files; it's been pre-filled with
-some Python defaults but you can edit it if you notice junk files
-being committed to your repository.
+- **User Authentication & Authorization**:
+  - Built-in authentication and authorization system to ensure secure access control. Users can create accounts, log in, and manage their profiles.
 
-Do not, under any circumstances, create a folder called `autotester`
-in the root of this repository. If you do, the autotester will break.
+- **AJAX Integration**:
+  - Used **AJAX** for asynchronous actions, enabling seamless interactions such as live grade calculations and real-time form submissions.
 
-Github Actions
---------------
+- **Data Management**:
+  - Utilized **Django ORM** to manage the application’s SQLite database for fast, reliable, and secure data handling.
 
-Every time you push to this repository, it will auto-test the current
-homework assignment. The auto-test will roll over to the next week's
-assignment on the Monday after the previous assignment is due. The
-auto-tester only tests the "presubmission" component of the homework
-assignment. Passing the auto-tester doesn't mean you get full points
-on the homework!
+## Technology Stack
 
-Github actions will email you every time you push, if you fail a test.
-This will be pretty often while you're working on the presubmission.
-That will be _very_ annoying. We recommend [turning this
-off][notification].
+- **Frontend**: 
+  - HTML, CSS, JavaScript
+  - jQuery for asynchronous updates and interactive features
 
-[notification]: https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-notifications/about-notifications
+- **Backend**: 
+  - Django (Python)
+  - SQLite for database management
+
+- **Hosting**:
+  - Deployed on **AWS EC2** for scalable, cloud-based hosting.
